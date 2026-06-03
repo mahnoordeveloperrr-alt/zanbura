@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 // ========== IMAGE IMPORTS ==========
-import honeyMainImg from './img/11.png';   // main honey jar, product images, categories, about, why machine
-import heroJarImg from './img/3.png';      // hero section ka jar
-import bee1Img from './img/4.png';         // bee 1 (top left)
-import bee2Img from './img/1.png';         // bee 2 (bottom right)
-import giftBoxImg from './img/bar.png';    // gift box image
+import honeyMainImg from './img/11.png';
+import heroJarImg from './img/3.png';
+import bee1Img from './img/4.png';
+import bee2Img from './img/1.png';
+import giftBoxImg from './img/bar.png';
 
-// ==================== STYLES (same as before) ====================
+// ==================== STYLES (with search modal design & responsive tweaks) ====================
 const styles = `
 * {
     margin: 0;
@@ -191,7 +191,7 @@ header {
 .hero .img {
     width: 100%;
     height: 100%;
-    object-fit: contain;  /* ya cover, jo aapko pasand ho */
+    object-fit: contain;
     object-position: center;
 }
 
@@ -398,6 +398,7 @@ header {
 .whatsapp-float:hover { transform: scale(1.1); background: #20b859; }
 @keyframes pulseWA { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); } 70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
 
+/* ========== MODAL OVERLAY (common) ========== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -458,6 +459,89 @@ header {
     color: var(--primary);
     background: rgba(238,146,35,0.1);
 }
+
+/* ========== SEARCH MODAL SPECIFIC STYLES (New Design) ========== */
+.search-container {
+    max-width: 500px;
+    text-align: center;
+    padding: 40px 32px;
+}
+.search-container h3 {
+    font-size: 1.8rem;
+    color: var(--primary-dark);
+    margin-bottom: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.search-input-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: white;
+    border-radius: 60px;
+    border: 2px solid rgba(238,146,35,0.3);
+    transition: all 0.3s;
+    padding: 4px 4px 4px 20px;
+}
+.search-input-group:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(238,146,35,0.15);
+}
+.search-input-group input {
+    flex: 1;
+    padding: 14px 8px;
+    border: none;
+    background: transparent;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 1rem;
+    outline: none;
+    color: #2C221B;
+}
+.search-input-group input::placeholder {
+    color: #b9aa96;
+    font-weight: 400;
+}
+.search-input-group button {
+    background: var(--primary);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-input-group button:hover {
+    background: var(--primary-dark);
+    transform: scale(1.03);
+}
+/* Responsive for search modal on small screens */
+@media (max-width: 480px) {
+    .search-container {
+        padding: 28px 20px;
+    }
+    .search-container h3 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+    }
+    .search-input-group {
+        padding: 3px 3px 3px 16px;
+    }
+    .search-input-group input {
+        padding: 10px 6px;
+        font-size: 0.9rem;
+    }
+    .search-input-group button {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* ========== MODAL TABS (unchanged, just keeping) ========== */
 .modal-tabs {
     display: flex;
     gap: 20px;
@@ -537,9 +621,6 @@ header {
     cursor: pointer;
     font-weight: 700;
 }
-.hidden-form {
-    display: none;
-}
 .cart-item {
     display: flex;
     align-items: center;
@@ -575,9 +656,24 @@ header {
     color: #9b8a72;
 }
 
-@media(max-width:950px) {
+/* ========== RESPONSIVE TWEAKS (No design change, only smoothness) ========== */
+@media (max-width: 950px) {
     .hamburger { display: block; }
-    .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 260px; background: #fffdf7; flex-direction: column; gap: 0; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); padding: 12px 0; z-index: 1050; border: 1px solid rgba(238,146,35,0.25); }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 260px;
+        background: #fffdf7;
+        flex-direction: column;
+        gap: 0;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        padding: 12px 0;
+        z-index: 1050;
+        border: 1px solid rgba(238,146,35,0.25);
+    }
     .nav-links.active { display: flex; }
     .nav-links li { width: 100%; }
     .nav-links a { padding: 14px 22px; border-bottom: 1px solid rgba(238,146,35,0.1); font-size: 1rem; }
@@ -598,16 +694,28 @@ header {
     .why-features, .why-center { width: 100%; }
     .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media(max-width:600px) {
+@media (max-width: 600px) {
     .product-card { min-width: 100%; flex: 0 0 100%; }
     .h1 { font-size: 1.8rem; width: 90%; }
     .modern-card { min-width: 120px; }
     .whatsapp-float { width: 50px; height: 50px; font-size: 28px; }
     .footer-grid { grid-template-columns: 1fr; text-align: center; }
+    .modal-container { padding: 28px 18px; }
+    .modal-tabs .tab-btn { font-size: 1rem; padding: 4px 16px; }
+}
+@media (max-width: 480px) {
+    .hero .img { object-fit: cover; }
+    .bee1, .bee2 { width: 50px; height: 50px; }
+    .offer-image img { width: 130px; }
+    .modern-circle { width: 90px; height: 90px; }
+    .modern-circle img { width: 50px; }
+    .why-card { padding: 12px; }
+    .why-icon { width: 40px; height: 40px; font-size: 16px; }
+    .footer-col h4 { font-size: 1.2rem; }
 }
 `;
 
-// ==================== DATA (UPDATED WITH IMPORTED IMAGES) ====================
+// ==================== DATA ====================
 const allProducts = [
     { id: 1, name: "سدر خالص شہد", price: 1200, category: "sidr", badge: "خالص", img: honeyMainImg },
     { id: 2, name: "جنگلی پھول شہد", price: 1450, category: "wild", badge: "قدرتی", img: honeyMainImg },
@@ -1017,14 +1125,26 @@ function App() {
                 </div>
             </div>
 
-            {/* Search Modal */}
+            {/* Search Modal (Improved Design) */}
             <div className={`modal-overlay ${isSearchOpen ? 'active' : ''}`} onClick={() => setIsSearchOpen(false)}>
                 <div className="modal-container search-container" onClick={(e) => e.stopPropagation()}>
                     <button className="modal-close" onClick={() => setIsSearchOpen(false)}><i className="fas fa-times"></i></button>
-                    <h3>تلاش کریں</h3>
+                    <h3>🔍 تلاش کریں</h3>
                     <div className="search-input-group">
-                        <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="شہد، مصنوعات..." onKeyPress={(e) => e.key === 'Enter' && handleSearch()} />
-                        <button onClick={handleSearch}><i className="fas fa-search"></i></button>
+                        <input 
+                            type="text" 
+                            value={searchTerm} 
+                            onChange={(e) => setSearchTerm(e.target.value)} 
+                            placeholder="شہد، مصنوعات یا زمرہ..."
+                            onKeyPress={(e) => e.key === 'Enter' && handleSearch()} 
+                            autoFocus
+                        />
+                        <button onClick={handleSearch}>
+                            <i className="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', marginTop: '18px', color: '#b9aa96' }}>
+                        مثال: سدر شہد, آرگینک, پریمیم
                     </div>
                 </div>
             </div>
