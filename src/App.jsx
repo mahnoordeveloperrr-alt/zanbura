@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-// ==================== STYLES ====================
+// ========== IMAGE IMPORTS ==========
+import honeyMainImg from './img/11.png';   // main honey jar, product images, categories, about, why machine
+import heroJarImg from './img/3.png';      // hero section ka jar
+import bee1Img from './img/4.png';         // bee 1 (top left)
+import bee2Img from './img/1.png';         // bee 2 (bottom right)
+import giftBoxImg from './img/bar.png';    // gift box image
+
+// ==================== STYLES (same as before) ====================
 const styles = `
 * {
     margin: 0;
@@ -600,25 +607,25 @@ header {
 }
 `;
 
-// ==================== DATA ====================
+// ==================== DATA (UPDATED WITH IMPORTED IMAGES) ====================
 const allProducts = [
-    { id: 1, name: "سدر خالص شہد", price: 1200, category: "sidr", badge: "خالص", img: "/img/11.png" },
-    { id: 2, name: "جنگلی پھول شہد", price: 1450, category: "wild", badge: "قدرتی", img: "/img/11.png" },
-    { id: 3, name: "آرگینک شہد", price: 1800, category: "organic", badge: "پریمیم", img: "/img/11.png" },
-    { id: 4, name: "سدر پریمیم", price: 2200, category: "sidr", badge: "خالص", img: "/img/11.png" },
-    { id: 5, name: "شمالی جنگلی", price: 1650, category: "wild", badge: "قدرتی", img: "/img/11.png" },
-    { id: 6, name: "آرگینک گولڈ", price: 2100, category: "organic", badge: "پریمیم", img: "/img/11.png" }
+    { id: 1, name: "سدر خالص شہد", price: 1200, category: "sidr", badge: "خالص", img: honeyMainImg },
+    { id: 2, name: "جنگلی پھول شہد", price: 1450, category: "wild", badge: "قدرتی", img: honeyMainImg },
+    { id: 3, name: "آرگینک شہد", price: 1800, category: "organic", badge: "پریمیم", img: honeyMainImg },
+    { id: 4, name: "سدر پریمیم", price: 2200, category: "sidr", badge: "خالص", img: honeyMainImg },
+    { id: 5, name: "شمالی جنگلی", price: 1650, category: "wild", badge: "قدرتی", img: honeyMainImg },
+    { id: 6, name: "آرگینک گولڈ", price: 2100, category: "organic", badge: "پریمیم", img: honeyMainImg }
 ];
 
 const categories = [
-    { name: "سدر شہد", img: "/img/11.png" },
-    { name: "کشمیری شہد", img: "/img/11.png" },
-    { name: "جنگلی پھول", img: "/img/11.png" },
-    { name: "آرگینک شہد", img: "/img/11.png" },
-    { name: "پریمیم شہد", img: "/img/11.png" },
-    { name: "لائیچی شہد", img: "/img/11.png" },
-    { name: "نیم کے پھول", img: "/img/11.png" },
-    { name: "شاہی شہد", img: "/img/11.png" }
+    { name: "سدر شہد", img: honeyMainImg },
+    { name: "کشمیری شہد", img: honeyMainImg },
+    { name: "جنگلی پھول", img: honeyMainImg },
+    { name: "آرگینک شہد", img: honeyMainImg },
+    { name: "پریمیم شہد", img: honeyMainImg },
+    { name: "لائیچی شہد", img: honeyMainImg },
+    { name: "نیم کے پھول", img: honeyMainImg },
+    { name: "شاہی شہد", img: honeyMainImg }
 ];
 
 // ==================== MAIN APP ====================
@@ -789,12 +796,12 @@ function App() {
 
             {/* Hero Section */}
             <div className="herosection" id="home">
-                <div className="bee1"><img src="/img/4.png" alt="bee" /></div>
+                <div className="bee1"><img src={bee1Img} alt="bee" /></div>
                 <div className="hero">
-                    <img className="img" src="/img/3.png" alt="honey" />
+                    <img className="img" src={heroJarImg} alt="honey" />
                     <h1 className="h1">قدرت کا سنہری تحفہ<br />خالص شہد زنبورا</h1>
                 </div>
-                <div className="bee2"><img src="/img/1.png" alt="bee" /></div>
+                <div className="bee2"><img src={bee2Img} alt="bee" /></div>
             </div>
 
             {/* About Section */}
@@ -808,7 +815,7 @@ function App() {
                         <a href="#testimonials" className="btn" style={{ marginRight: '12px', background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary-dark)' }} onClick={(e) => smoothScroll(e, '#testimonials')}>مزید جانیں</a>
                     </div>
                 </div>
-                <div className="image-box"><div className="image-bg"></div><img src="/img/11.png" alt="شہد" /></div>
+                <div className="image-box"><div className="image-bg"></div><img src={honeyMainImg} alt="شہد" /></div>
             </section>
 
             {/* Products Section */}
@@ -855,11 +862,11 @@ function App() {
                     <div className="offer-wrapper reveal">
                         <div className="offer-card light-card">
                             <div className="offer-content"><h2>خالص شہد گفٹ باکس</h2><p>قدرتی شہد کے خصوصی تحائف</p><a href="#products" className="offer-btn" onClick={(e) => smoothScroll(e, '#products')}>ابھی خریدیں</a></div>
-                            <div className="offer-image"><img src="/img/bar.png" alt="gift" /></div>
+                            <div className="offer-image"><img src={giftBoxImg} alt="gift" /></div>
                         </div>
                         <div className="offer-card dark-card">
                             <div className="offer-content"><h2>زنبورا پریمیم شہد</h2><p>خالص اور قدرتی ذائقہ</p><a href="#products" className="offer-btn dark-btn" onClick={(e) => smoothScroll(e, '#products')}>مزید دیکھیں</a></div>
-                            <div className="offer-image"><img src="/img/11.png" alt="premium" /></div>
+                            <div className="offer-image"><img src={honeyMainImg} alt="premium" /></div>
                         </div>
                     </div>
                 </div>
@@ -896,7 +903,7 @@ function App() {
                             <div className="why-card"><div className="why-icon"><i className="fas fa-award"></i></div><h4>بہترین معیار کی ضمانت</h4></div>
                             <div className="why-card"><div className="why-icon"><i className="fas fa-truck"></i></div><h4>تیز اور محفوظ ڈیلیوری</h4></div>
                         </div>
-                        <div className="why-center"><div className="why-machine"><img src="/img/11.png" alt="honey" /></div></div>
+                        <div className="why-center"><div className="why-machine"><img src={honeyMainImg} alt="honey" /></div></div>
                         <div className="why-features">
                             <div className="why-card"><div className="why-icon"><i className="fas fa-heart"></i></div><h4>صحت بخش اور غذائیت سے بھرپور</h4></div>
                             <div className="why-card"><div className="why-icon"><i className="fas fa-shield-alt"></i></div><h4>مکمل صفائی اور حفاظت</h4></div>
