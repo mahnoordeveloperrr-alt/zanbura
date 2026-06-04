@@ -13,6 +13,10 @@ Error generating stack: `+e.message+`
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden; /* ← Prevent horizontal scroll on root */
+}
+
 body {
     background: #FCF3E4;
     font-family: 'Noto Nastaliq Urdu', serif;
@@ -517,7 +521,6 @@ header {
     background: var(--primary-dark);
     transform: scale(1.03);
 }
-/* Responsive for search modal on small screens */
 @media (max-width: 480px) {
     .search-container {
         padding: 28px 20px;
@@ -539,7 +542,7 @@ header {
     }
 }
 
-/* ========== MODAL TABS (unchanged, just keeping) ========== */
+/* ========== MODAL TABS ========== */
 .modal-tabs {
     display: flex;
     gap: 20px;
@@ -654,7 +657,7 @@ header {
     color: #9b8a72;
 }
 
-/* ========== RESPONSIVE TWEAKS (No design change, only smoothness) ========== */
+/* ========== RESPONSIVE TWEAKS (Added hero width fix) ========== */
 @media (max-width: 950px) {
     .hamburger { display: block; }
     .nav-links {
@@ -693,6 +696,7 @@ header {
     .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
+    .hero { width: 100%; } /* ← FIX: Hero full width to prevent overflow */
     .product-card { min-width: 100%; flex: 0 0 100%; }
     .h1 { font-size: 1.8rem; width: 90%; }
     .modern-card { min-width: 120px; }
