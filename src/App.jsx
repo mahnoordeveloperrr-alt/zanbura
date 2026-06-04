@@ -7,12 +7,16 @@ import bee1Img from './img/4.png';
 import bee2Img from './img/1.png';
 import giftBoxImg from './img/bar.png';
 
-// ==================== STYLES (with search modal design & responsive tweaks) ====================
+// ==================== STYLES (Fixed overflow & hero width) ====================
 const styles = `
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden; /* ← Prevent horizontal scroll on root */
 }
 
 body {
@@ -519,7 +523,6 @@ header {
     background: var(--primary-dark);
     transform: scale(1.03);
 }
-/* Responsive for search modal on small screens */
 @media (max-width: 480px) {
     .search-container {
         padding: 28px 20px;
@@ -541,7 +544,7 @@ header {
     }
 }
 
-/* ========== MODAL TABS (unchanged, just keeping) ========== */
+/* ========== MODAL TABS ========== */
 .modal-tabs {
     display: flex;
     gap: 20px;
@@ -656,7 +659,7 @@ header {
     color: #9b8a72;
 }
 
-/* ========== RESPONSIVE TWEAKS (No design change, only smoothness) ========== */
+/* ========== RESPONSIVE TWEAKS (Added hero width fix) ========== */
 @media (max-width: 950px) {
     .hamburger { display: block; }
     .nav-links {
@@ -695,6 +698,7 @@ header {
     .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
+    .hero { width: 100%; } /* ← FIX: Hero full width to prevent overflow */
     .product-card { min-width: 100%; flex: 0 0 100%; }
     .h1 { font-size: 1.8rem; width: 90%; }
     .modern-card { min-width: 120px; }
@@ -715,441 +719,424 @@ header {
 }
 `;
 
-// ==================== DATA ====================
+// ==================== DATA (unchanged) ====================
 const allProducts = [
-    { id: 1, name: "سدر خالص شہد", price: 1200, category: "sidr", badge: "خالص", img: honeyMainImg },
-    { id: 2, name: "جنگلی پھول شہد", price: 1450, category: "wild", badge: "قدرتی", img: honeyMainImg },
-    { id: 3, name: "آرگینک شہد", price: 1800, category: "organic", badge: "پریمیم", img: honeyMainImg },
-    { id: 4, name: "سدر پریمیم", price: 2200, category: "sidr", badge: "خالص", img: honeyMainImg },
-    { id: 5, name: "شمالی جنگلی", price: 1650, category: "wild", badge: "قدرتی", img: honeyMainImg },
-    { id: 6, name: "آرگینک گولڈ", price: 2100, category: "organic", badge: "پریمیم", img: honeyMainImg }
+  { id: 1, name: "سدر خالص شہد", price: 1200, category: "sidr", badge: "خالص", img: honeyMainImg },
+  { id: 2, name: "جنگلی پھول شہد", price: 1450, category: "wild", badge: "قدرتی", img: honeyMainImg },
+  { id: 3, name: "آرگینک شہد", price: 1800, category: "organic", badge: "پریمیم", img: honeyMainImg },
+  { id: 4, name: "سدر پریمیم", price: 2200, category: "sidr", badge: "خالص", img: honeyMainImg },
+  { id: 5, name: "شمالی جنگلی", price: 1650, category: "wild", badge: "قدرتی", img: honeyMainImg },
+  { id: 6, name: "آرگینک گولڈ", price: 2100, category: "organic", badge: "پریمیم", img: honeyMainImg }
 ];
 
 const categories = [
-    { name: "سدر شہد", img: honeyMainImg },
-    { name: "کشمیری شہد", img: honeyMainImg },
-    { name: "جنگلی پھول", img: honeyMainImg },
-    { name: "آرگینک شہد", img: honeyMainImg },
-    { name: "پریمیم شہد", img: honeyMainImg },
-    { name: "لائیچی شہد", img: honeyMainImg },
-    { name: "نیم کے پھول", img: honeyMainImg },
-    { name: "شاہی شہد", img: honeyMainImg }
+  { name: "سدر شہد", img: honeyMainImg },
+  { name: "کشمیری شہد", img: honeyMainImg },
+  { name: "جنگلی پھول", img: honeyMainImg },
+  { name: "آرگینک شہد", img: honeyMainImg },
+  { name: "پریمیم شہد", img: honeyMainImg },
+  { name: "لائیچی شہد", img: honeyMainImg },
+  { name: "نیم کے پھول", img: honeyMainImg },
+  { name: "شاہی شہد", img: honeyMainImg }
 ];
 
-// ==================== MAIN APP ====================
+// ==================== MAIN APP (identical to original) ====================
 function App() {
-    const [cart, setCart] = useState([]);
-    const [nextId, setNextId] = useState(1);
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [filter, setFilter] = useState('all');
-    const [currentPage, setCurrentPage] = useState(0);
-    const [activeFaq, setActiveFaq] = useState(null);
-    const [activeAuthTab, setActiveAuthTab] = useState('login');
-    const [loginEmail, setLoginEmail] = useState('');
-    const [loginPassword, setLoginPassword] = useState('');
-    const [regName, setRegName] = useState('');
-    const [regEmail, setRegEmail] = useState('');
-    const [regPassword, setRegPassword] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
+  const [cart, setCart] = useState([]);
+  const [nextId, setNextId] = useState(1);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [activeFaq, setActiveFaq] = useState(null);
+  const [activeAuthTab, setActiveAuthTab] = useState('login');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [regName, setRegName] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const itemsPerPage = 3;
+  const itemsPerPage = 3;
 
-    // Load cart from localStorage
-    useEffect(() => {
-        const savedCart = localStorage.getItem('zanburaCart');
-        if (savedCart) {
-            const parsed = JSON.parse(savedCart);
-            setCart(parsed);
-            if (parsed.length) {
-                const maxId = Math.max(...parsed.map(i => i.id), 0);
-                setNextId(maxId + 1);
-            }
+  useEffect(() => {
+    const savedCart = localStorage.getItem('zanburaCart');
+    if (savedCart) {
+      const parsed = JSON.parse(savedCart);
+      setCart(parsed);
+      if (parsed.length) {
+        const maxId = Math.max(...parsed.map(i => i.id), 0);
+        setNextId(maxId + 1);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('zanburaCart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
         }
-    }, []);
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
-    // Save cart to localStorage
-    useEffect(() => {
-        localStorage.setItem('zanburaCart', JSON.stringify(cart));
-    }, [cart]);
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+    return () => styleSheet.remove();
+  }, []);
 
-    // Scroll reveal observer
-    useEffect(() => {
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-        reveals.forEach(el => observer.observe(el));
-        return () => observer.disconnect();
-    }, []);
+  const filteredProducts = filter === 'all' ? allProducts : allProducts.filter(p => p.category === filter);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const displayedProducts = filteredProducts.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
-    // Inject styles
-    useEffect(() => {
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = styles;
-        document.head.appendChild(styleSheet);
-        return () => styleSheet.remove();
-    }, []);
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [filter]);
 
-    const filteredProducts = filter === 'all' ? allProducts : allProducts.filter(p => p.category === filter);
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const displayedProducts = filteredProducts.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  const addToCart = (product) => {
+    const existing = cart.find(item => item.name === product.name);
+    if (existing) {
+      setCart(cart.map(item =>
+        item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      setCart([...cart, {
+        id: nextId,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        img: product.img
+      }]);
+      setNextId(nextId + 1);
+    }
+    const msg = document.createElement('div');
+    msg.textContent = `${product.name} کارٹ میں شامل!`;
+    msg.style.cssText = 'position:fixed; bottom:90px; left:20px; background:#EE9223; color:white; padding:8px 18px; border-radius:40px; z-index:3000;';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 1500);
+  };
 
-    useEffect(() => {
-        setCurrentPage(0);
-    }, [filter]);
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      setCart(cart.filter(item => item.id !== id));
+    } else {
+      setCart(cart.map(item => item.id === id ? { ...item, quantity: newQuantity } : item));
+    }
+  };
 
-    const addToCart = (product) => {
-        const existing = cart.find(item => item.name === product.name);
-        if (existing) {
-            setCart(cart.map(item => 
-                item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
-            ));
-        } else {
-            setCart([...cart, { 
-                id: nextId, 
-                name: product.name, 
-                price: product.price, 
-                quantity: 1, 
-                img: product.img 
-            }]);
-            setNextId(nextId + 1);
-        }
-        const msg = document.createElement('div');
-        msg.textContent = `${product.name} کارٹ میں شامل!`;
-        msg.style.cssText = 'position:fixed; bottom:90px; left:20px; background:#EE9223; color:white; padding:8px 18px; border-radius:40px; z-index:3000;';
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 1500);
-    };
+  const removeItem = (id) => {
+    setCart(cart.filter(item => item.id !== id));
+  };
 
-    const updateQuantity = (id, newQuantity) => {
-        if (newQuantity <= 0) {
-            setCart(cart.filter(item => item.id !== id));
-        } else {
-            setCart(cart.map(item => item.id === id ? { ...item, quantity: newQuantity } : item));
-        }
-    };
+  const clearCart = () => {
+    setCart([]);
+  };
 
-    const removeItem = (id) => {
-        setCart(cart.filter(item => item.id !== id));
-    };
+  const handleLogin = () => {
+    if (!loginEmail || !loginPassword) alert('براہ کرم ای میل اور پاس ورڈ درج کریں');
+    else { alert('داخلہ کامیاب! خوش آمدید'); setIsAuthOpen(false); }
+  };
 
-    const clearCart = () => {
-        setCart([]);
-    };
+  const handleRegister = () => {
+    if (!regName || !regEmail || !regPassword) alert('براہ کرم تمام فیلڈز بھریں');
+    else if (regPassword.length < 6) alert('پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے');
+    else { alert('اندراج کامیاب! اب آپ داخل ہو سکتے ہیں'); setActiveAuthTab('login'); setIsAuthOpen(false); }
+  };
 
-    const handleLogin = () => {
-        if (!loginEmail || !loginPassword) alert('براہ کرم ای میل اور پاس ورڈ درج کریں');
-        else { alert('داخلہ کامیاب! خوش آمدید'); setIsAuthOpen(false); }
-    };
+  const handleSearch = () => {
+    if (searchTerm.trim()) alert(`"${searchTerm}" کی تلاش کے نتائج جلد آئیں گے۔`);
+    else alert('براہ کرم تلاش کے لیے لفظ درج کریں');
+    setIsSearchOpen(false);
+    setSearchTerm('');
+  };
 
-    const handleRegister = () => {
-        if (!regName || !regEmail || !regPassword) alert('براہ کرم تمام فیلڈز بھریں');
-        else if (regPassword.length < 6) alert('پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے');
-        else { alert('اندراج کامیاب! اب آپ داخل ہو سکتے ہیں'); setActiveAuthTab('login'); setIsAuthOpen(false); }
-    };
+  const smoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const element = document.querySelector(targetId);
+    if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMenuOpen(false);
+  };
 
-    const handleSearch = () => {
-        if (searchTerm.trim()) alert(`"${searchTerm}" کی تلاش کے نتائج جلد آئیں گے۔`);
-        else alert('براہ کرم تلاش کے لیے لفظ درج کریں');
-        setIsSearchOpen(false);
-        setSearchTerm('');
-    };
+  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    const smoothScroll = (e, targetId) => {
-        e.preventDefault();
-        const element = document.querySelector(targetId);
-        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setMenuOpen(false);
-    };
+  return (
+    <>
+      <div className="blur-circle" style={{ width: '400px', height: '400px', top: '20%', left: '-100px' }}></div>
+      <div className="blur-circle" style={{ width: '550px', height: '550px', bottom: '5%', right: '-150px' }}></div>
 
-    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-    return (
-        <>
-            <div className="blur-circle" style={{ width: '400px', height: '400px', top: '20%', left: '-100px' }}></div>
-            <div className="blur-circle" style={{ width: '550px', height: '550px', bottom: '5%', right: '-150px' }}></div>
-
-            {/* Header */}
-            <header>
-                <nav className="navbar">
-                    <div className="container nav-wrapper">
-                        <div className="logo"><i className="fas fa-honey-pot"></i> زنبورا</div>
-                        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-                            <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
-                        </button>
-                        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
-                            <li><a href="#home" onClick={(e) => smoothScroll(e, '#home')}><i className="fas fa-home"></i> صفحہ اول</a></li>
-                            <li><a href="#products" onClick={(e) => smoothScroll(e, '#products')}><i className="fas fa-oil-can"></i> مصنوعات</a></li>
-                            <li><a href="#about" onClick={(e) => smoothScroll(e, '#about')}><i className="fas fa-leaf"></i> تعارف</a></li>
-                            <li><a href="#testimonials" onClick={(e) => smoothScroll(e, '#testimonials')}><i className="fas fa-star"></i> تبصرے</a></li>
-                            <li><a href="#faq" onClick={(e) => smoothScroll(e, '#faq')}><i className="fas fa-question-circle"></i> سوالات</a></li>
-                            <li><a href="#contact" onClick={(e) => smoothScroll(e, '#contact')}><i className="fas fa-phone-alt"></i> رابطہ</a></li>
-                        </ul>
-                        <div className="icons">
-                            <i className="fas fa-search" onClick={() => setIsSearchOpen(true)}></i>
-                            <i className="fas fa-shopping-cart" onClick={() => setIsCartOpen(true)}></i>
-                            <i className="fas fa-user-circle" onClick={() => setIsAuthOpen(true)}></i>
-                        </div>
-                    </div>
-                </nav>
-            </header>
-
-            {/* Hero Section */}
-            <div className="herosection" id="home">
-                <div className="bee1"><img src={bee1Img} alt="bee" /></div>
-                <div className="hero">
-                    <img className="img" src={heroJarImg} alt="honey" />
-                    <h1 className="h1">قدرت کا سنہری تحفہ<br />خالص شہد زنبورا</h1>
-                </div>
-                <div className="bee2"><img src={bee2Img} alt="bee" /></div>
+      <header>
+        <nav className="navbar">
+          <div className="container nav-wrapper">
+            <div className="logo"><i className="fas fa-honey-pot"></i> زنبورا</div>
+            <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+              <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </button>
+            <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+              <li><a href="#home" onClick={(e) => smoothScroll(e, '#home')}><i className="fas fa-home"></i> صفحہ اول</a></li>
+              <li><a href="#products" onClick={(e) => smoothScroll(e, '#products')}><i className="fas fa-oil-can"></i> مصنوعات</a></li>
+              <li><a href="#about" onClick={(e) => smoothScroll(e, '#about')}><i className="fas fa-leaf"></i> تعارف</a></li>
+              <li><a href="#testimonials" onClick={(e) => smoothScroll(e, '#testimonials')}><i className="fas fa-star"></i> تبصرے</a></li>
+              <li><a href="#faq" onClick={(e) => smoothScroll(e, '#faq')}><i className="fas fa-question-circle"></i> سوالات</a></li>
+              <li><a href="#contact" onClick={(e) => smoothScroll(e, '#contact')}><i className="fas fa-phone-alt"></i> رابطہ</a></li>
+            </ul>
+            <div className="icons">
+              <i className="fas fa-search" onClick={() => setIsSearchOpen(true)}></i>
+              <i className="fas fa-shopping-cart" onClick={() => setIsCartOpen(true)}></i>
+              <i className="fas fa-user-circle" onClick={() => setIsAuthOpen(true)}></i>
             </div>
+          </div>
+        </nav>
+      </header>
 
-            {/* About Section */}
-            <section className="container banner reveal" id="about">
-                <div className="content">
-                    <div className="small-title">قدرتی اور خالص</div>
-                    <h1 className="main-title">خالص شہد کی مٹھاس <br /> قدرت کے ساتھ</h1>
-                    <p className="description">بہترین معیار کے خالص شہد سے لطف اٹھائیں۔ قدرتی ذائقہ، صحت بخش فوائد اور خوشبو سے بھرپور۔</p>
-                    <div>
-                        <a href="#products" className="btn" onClick={(e) => smoothScroll(e, '#products')}>ابھی خریدیں</a>
-                        <a href="#testimonials" className="btn" style={{ marginRight: '12px', background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary-dark)' }} onClick={(e) => smoothScroll(e, '#testimonials')}>مزید جانیں</a>
-                    </div>
-                </div>
-                <div className="image-box"><div className="image-bg"></div><img src={honeyMainImg} alt="شہد" /></div>
-            </section>
+      <div className="herosection" id="home">
+        <div className="bee1"><img src={bee1Img} alt="bee" /></div>
+        <div className="hero">
+          <img className="img" src={heroJarImg} alt="honey" />
+          <h1 className="h1">قدرت کا سنہری تحفہ<br />خالص شہد زنبورا</h1>
+        </div>
+        <div className="bee2"><img src={bee2Img} alt="bee" /></div>
+      </div>
 
-            {/* Products Section */}
-            <section className="products-section" id="products">
-                <div className="container">
-                    <div className="products-wrapper reveal">
-                        <div className="product-side">
-                            <h2>مصنوعات <br />تخفیف دار</h2>
-                            <div className="filter-box">
-                                <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                                    <option value="all">تمام مصنوعات</option>
-                                    <option value="sidr">سدر شہد</option>
-                                    <option value="wild">جنگلی پھول</option>
-                                    <option value="organic">آرگینک شہد</option>
-                                </select>
-                            </div>
-                            <div className="side-icons">
-                                <button onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)}><i className="fas fa-arrow-right"></i></button>
-                                <button onClick={() => (currentPage + 1) * itemsPerPage < filteredProducts.length && setCurrentPage(currentPage + 1)}><i className="fas fa-arrow-left"></i></button>
-                            </div>
-                        </div>
-                        <div className="products-carousel-container">
-                            <div className="products-grid">
-                                {displayedProducts.map(product => (
-                                    <div className="product-card" key={product.id}>
-                                        <span className="badge">{product.badge}</span>
-                                        <div className="product-image"><img src={product.img} alt={product.name} /></div>
-                                        <h3 className="product-title">{product.name}</h3>
-                                        <div className="product-bottom">
-                                            <span className="price">Rs {product.price}</span>
-                                            <button className="cart-btn" onClick={() => addToCart(product)}><i className="fas fa-shopping-bag"></i></button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <section className="container banner reveal" id="about">
+        <div className="content">
+          <div className="small-title">قدرتی اور خالص</div>
+          <h1 className="main-title">خالص شہد کی مٹھاس <br /> قدرت کے ساتھ</h1>
+          <p className="description">بہترین معیار کے خالص شہد سے لطف اٹھائیں۔ قدرتی ذائقہ، صحت بخش فوائد اور خوشبو سے بھرپور۔</p>
+          <div>
+            <a href="#products" className="btn" onClick={(e) => smoothScroll(e, '#products')}>ابھی خریدیں</a>
+            <a href="#testimonials" className="btn" style={{ marginRight: '12px', background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary-dark)' }} onClick={(e) => smoothScroll(e, '#testimonials')}>مزید جانیں</a>
+          </div>
+        </div>
+        <div className="image-box"><div className="image-bg"></div><img src={honeyMainImg} alt="شہد" /></div>
+      </section>
 
-            {/* Offer Section */}
-            <section className="offer-section">
-                <div className="container">
-                    <div className="offer-wrapper reveal">
-                        <div className="offer-card light-card">
-                            <div className="offer-content"><h2>خالص شہد گفٹ باکس</h2><p>قدرتی شہد کے خصوصی تحائف</p><a href="#products" className="offer-btn" onClick={(e) => smoothScroll(e, '#products')}>ابھی خریدیں</a></div>
-                            <div className="offer-image"><img src={giftBoxImg} alt="gift" /></div>
-                        </div>
-                        <div className="offer-card dark-card">
-                            <div className="offer-content"><h2>زنبورا پریمیم شہد</h2><p>خالص اور قدرتی ذائقہ</p><a href="#products" className="offer-btn dark-btn" onClick={(e) => smoothScroll(e, '#products')}>مزید دیکھیں</a></div>
-                            <div className="offer-image"><img src={honeyMainImg} alt="premium" /></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Category Slider */}
-            <section className="modern-category">
-                <div className="container">
-                    <div className="modern-category-box reveal">
-                        <div className="modern-category-header"><h2>مصنوعات کی اقسام</h2><p>زنبورا کے خالص اور قدرتی شہد کی مختلف اقسام</p></div>
-                        <div className="modern-slider-wrapper">
-                            <button className="modern-arrow" onClick={() => document.querySelector('.modern-slider')?.scrollBy({ left: -170, behavior: 'smooth' })}><i className="fas fa-chevron-right"></i></button>
-                            <div className="modern-slider">
-                                {categories.map((cat, idx) => (
-                                    <div className="modern-card" key={idx}>
-                                        <div className="modern-circle"><img src={cat.img} alt={cat.name} /></div>
-                                        <h4>{cat.name}</h4>
-                                    </div>
-                                ))}
-                            </div>
-                            <button className="modern-arrow" onClick={() => document.querySelector('.modern-slider')?.scrollBy({ left: 170, behavior: 'smooth' })}><i className="fas fa-chevron-left"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Why Section */}
-            <section className="why-section" id="contact">
-                <div className="container">
-                    <div className="why-title reveal"><h2>کیوں <span>زنبورا</span> کو منتخب کریں؟</h2></div>
-                    <div className="why-wrapper reveal">
-                        <div className="why-features">
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-leaf"></i></div><h4>خالص اور قدرتی شہد</h4></div>
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-award"></i></div><h4>بہترین معیار کی ضمانت</h4></div>
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-truck"></i></div><h4>تیز اور محفوظ ڈیلیوری</h4></div>
-                        </div>
-                        <div className="why-center"><div className="why-machine"><img src={honeyMainImg} alt="honey" /></div></div>
-                        <div className="why-features">
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-heart"></i></div><h4>صحت بخش اور غذائیت سے بھرپور</h4></div>
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-shield-alt"></i></div><h4>مکمل صفائی اور حفاظت</h4></div>
-                            <div className="why-card"><div className="why-icon"><i className="fas fa-star"></i></div><h4>ہزاروں خوش صارفین کا اعتماد</h4></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Testimonials */}
-            <section className="testimonials-section" id="testimonials">
-                <div className="container">
-                    <div className="faq-title reveal"><h2>صارفین کے <span>تاثرات</span></h2></div>
-                    <div className="testimonial-grid">
-                        <div className="testi-card reveal"><div className="testi-stars">★★★★★</div><p className="testi-text">"زنبورا کا شہد حقیقت میں خالص اور لاجواب ہے۔ روزانہ استعمال سے مجھے توانائی محسوس ہوتی ہے۔"</p><h4 className="testi-name">- عائشہ خان</h4></div>
-                        <div className="testi-card reveal"><div className="testi-stars">★★★★★</div><p className="testi-text">"بہترین پیکنگ اور ذائقہ۔ میں نے سدر شہد آزمایا، واقعی معیاری ہے۔ شکریہ زنبورا۔"</p><h4 className="testi-name">- احمد رضا</h4></div>
-                        <div className="testi-card reveal"><div className="testi-stars">★★★★☆</div><p className="testi-text">"قدرتی مٹھاس اور خوشبو، گفٹ باکس بہت خوبصورت ہے۔ ضرور خریدیں گے۔"</p><h4 className="testi-name">- سعدیہ ملک</h4></div>
-                    </div>
-                    <div style={{ textAlign: 'center', marginTop: '40px' }}><a href="#products" className="btn" onClick={(e) => smoothScroll(e, '#products')}>مزید شہد خریدیں <i className="fas fa-arrow-left"></i></a></div>
-                </div>
-            </section>
-
-            {/* FAQ */}
-            <section className="faq-section" id="faq">
-                <div className="container">
-                    <div className="faq-title reveal"><h2>اکثر <span>پوچھے گئے</span> سوالات</h2></div>
-                    <div className="faq-container">
-                        {[
-                            { q: "کیا زنبورا شہد واقعی خالص ہے؟", a: "جی ہاں، زنبورا شہد 100% خالص اور قدرتی ہے، بغیر کسی ملاوٹ کے۔" },
-                            { q: "شہد کی ڈیلیوری میں کتنا وقت لگتا ہے؟", a: "پورے پاکستان میں 2 سے 4 کاروباری دنوں میں آپ کا آرڈر پہنچ جاتا ہے۔" },
-                            { q: "کون سی اقسام دستیاب ہیں؟", a: "سدر شہد، جنگلی پھول، آرگینک اور پریمیم گفٹ باکس موجود ہیں۔" },
-                            { q: "کیا میں بڑی تعداد میں آرڈر کر سکتا ہوں؟", a: "ہول سیل آرڈرز کے لیے رابطہ کریں۔ ہم خصوصی تخفیف دیتے ہیں۔" }
-                        ].map((faq, idx) => (
-                            <div key={idx} className={`faq-item ${activeFaq === idx ? 'active' : ''}`}>
-                                <div className="faq-question" onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}>
-                                    <span>{faq.q}</span><i className="fas fa-chevron-down"></i>
-                                </div>
-                                <div className="faq-answer"><p>{faq.a}</p></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="footer">
-                <div className="container">
-                    <div className="footer-grid">
-                        <div className="footer-col"><h4><i className="fas fa-droplet"></i> زنبورا</h4><p>قدرت کا سنہری تحفہ، خالص شہد۔ بہترین معیار اور قدرتی ذائقہ۔</p><div className="social-icons"><a href="#"><i className="fab fa-facebook-f"></i></a><a href="#"><i className="fab fa-instagram"></i></a><a href="#"><i className="fab fa-whatsapp"></i></a><a href="#"><i className="fab fa-twitter"></i></a></div></div>
-                        <div className="footer-col"><h4>فوری لنکس</h4><ul><li><a href="#home" onClick={(e) => smoothScroll(e, '#home')}>صفحہ اول</a></li><li><a href="#products" onClick={(e) => smoothScroll(e, '#products')}>مصنوعات</a></li><li><a href="#about" onClick={(e) => smoothScroll(e, '#about')}>تعارف</a></li><li><a href="#testimonials" onClick={(e) => smoothScroll(e, '#testimonials')}>تبصرے</a></li><li><a href="#faq" onClick={(e) => smoothScroll(e, '#faq')}>سوالات</a></li></ul></div>
-                        <div className="footer-col"><h4>رابطہ</h4><ul><li><i className="fas fa-map-marker-alt"></i> لاہور، پاکستان</li><li><i className="fas fa-phone"></i> +92 300 1234567</li><li><i className="fas fa-envelope"></i> info@zanbura.pk</li></ul></div>
-                        <div className="footer-col"><h4>اوقات کار</h4><ul><li>پیر - جمعہ: 9:00 - 18:00</li><li>ہفتہ: 10:00 - 16:00</li><li>اتوار: بند</li></ul></div>
-                    </div>
-                    <div className="footer-bottom"><p><i className="far fa-copyright"></i> 2026 زنبورا | تمام حقوق محفوظ ہیں | قدرت کے ساتھ مٹھاس <i className="fas fa-heart" style={{ color: 'var(--primary)' }}></i></p></div>
-                </div>
-            </footer>
-
-            <a href="https://wa.me/923001234567?text=مجھے%20زنبورا%20شہد%20خریدنا%20ہے" className="whatsapp-float" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp"></i></a>
-
-            {/* Cart Modal */}
-            <div className={`modal-overlay ${isCartOpen ? 'active' : ''}`} onClick={() => setIsCartOpen(false)}>
-                <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-                    <button className="modal-close" onClick={() => setIsCartOpen(false)}><i className="fas fa-times"></i></button>
-                    <h3>🛒 آپ کی کارٹ</h3>
-                    {cart.length === 0 ? (
-                        <div className="empty-cart-msg">کارٹ خالی ہے</div>
-                    ) : (
-                        <>
-                            {cart.map(item => (
-                                <div className="cart-item" key={item.id}>
-                                    <div><div>{item.name}</div><div>Rs {item.price} x {item.quantity}</div></div>
-                                    <div>
-                                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={{ margin: '0 5px', padding: '5px 10px', cursor: 'pointer' }}>-</button>
-                                        <span>{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={{ margin: '0 5px', padding: '5px 10px', cursor: 'pointer' }}>+</button>
-                                        <button onClick={() => removeItem(item.id)} style={{ marginRight: '12px', background: 'none', border: 'none', color: '#c0392b', cursor: 'pointer' }}><i className="fas fa-trash"></i></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </>
-                    )}
-                    <div className="cart-total">کل: Rs {cartTotal}</div>
-                    <button className="clear-cart-btn" onClick={clearCart}>کارٹ خالی کریں</button>
-                </div>
+      <section className="products-section" id="products">
+        <div className="container">
+          <div className="products-wrapper reveal">
+            <div className="product-side">
+              <h2>مصنوعات <br />تخفیف دار</h2>
+              <div className="filter-box">
+                <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                  <option value="all">تمام مصنوعات</option>
+                  <option value="sidr">سدر شہد</option>
+                  <option value="wild">جنگلی پھول</option>
+                  <option value="organic">آرگینک شہد</option>
+                </select>
+              </div>
+              <div className="side-icons">
+                <button onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)}><i className="fas fa-arrow-right"></i></button>
+                <button onClick={() => (currentPage + 1) * itemsPerPage < filteredProducts.length && setCurrentPage(currentPage + 1)}><i className="fas fa-arrow-left"></i></button>
+              </div>
             </div>
-
-            {/* Auth Modal */}
-            <div className={`modal-overlay ${isAuthOpen ? 'active' : ''}`} onClick={() => setIsAuthOpen(false)}>
-                <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-                    <button className="modal-close" onClick={() => setIsAuthOpen(false)}><i className="fas fa-times"></i></button>
-                    <div className="modal-tabs">
-                        <button className={`tab-btn ${activeAuthTab === 'login' ? 'active' : ''}`} onClick={() => setActiveAuthTab('login')}>داخلہ</button>
-                        <button className={`tab-btn ${activeAuthTab === 'register' ? 'active' : ''}`} onClick={() => setActiveAuthTab('register')}>اندراج</button>
+            <div className="products-carousel-container">
+              <div className="products-grid">
+                {displayedProducts.map(product => (
+                  <div className="product-card" key={product.id}>
+                    <span className="badge">{product.badge}</span>
+                    <div className="product-image"><img src={product.img} alt={product.name} /></div>
+                    <h3 className="product-title">{product.name}</h3>
+                    <div className="product-bottom">
+                      <span className="price">Rs {product.price}</span>
+                      <button className="cart-btn" onClick={() => addToCart(product)}><i className="fas fa-shopping-bag"></i></button>
                     </div>
-                    {activeAuthTab === 'login' ? (
-                        <div>
-                            <div className="form-group"><label>ای میل یا موبائل نمبر</label><input type="text" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="example@email.com" /></div>
-                            <div className="form-group"><label>پاس ورڈ</label><input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="••••••••" /></div>
-                            <button className="modal-btn" onClick={handleLogin}>داخل ہوں</button>
-                            <div className="form-switch">کیا آپ نیا ہیں؟ <span onClick={() => setActiveAuthTab('register')}>اندراج کریں</span></div>
-                        </div>
-                    ) : (
-                        <div>
-                            <div className="form-group"><label>مکمل نام</label><input type="text" value={regName} onChange={(e) => setRegName(e.target.value)} placeholder="علی احمد" /></div>
-                            <div className="form-group"><label>ای میل</label><input type="email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} placeholder="example@email.com" /></div>
-                            <div className="form-group"><label>پاس ورڈ</label><input type="password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} placeholder="کم از کم 6 حروف" /></div>
-                            <button className="modal-btn" onClick={handleRegister}>اندراج کریں</button>
-                            <div className="form-switch">پہلے سے رکن ہیں؟ <span onClick={() => setActiveAuthTab('login')}>داخلہ کریں</span></div>
-                        </div>
-                    )}
-                </div>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Search Modal (Improved Design) */}
-            <div className={`modal-overlay ${isSearchOpen ? 'active' : ''}`} onClick={() => setIsSearchOpen(false)}>
-                <div className="modal-container search-container" onClick={(e) => e.stopPropagation()}>
-                    <button className="modal-close" onClick={() => setIsSearchOpen(false)}><i className="fas fa-times"></i></button>
-                    <h3>🔍 تلاش کریں</h3>
-                    <div className="search-input-group">
-                        <input 
-                            type="text" 
-                            value={searchTerm} 
-                            onChange={(e) => setSearchTerm(e.target.value)} 
-                            placeholder="شہد، مصنوعات یا زمرہ..."
-                            onKeyPress={(e) => e.key === 'Enter' && handleSearch()} 
-                            autoFocus
-                        />
-                        <button onClick={handleSearch}>
-                            <i className="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <div style={{ fontSize: '0.75rem', marginTop: '18px', color: '#b9aa96' }}>
-                        مثال: سدر شہد, آرگینک, پریمیم
-                    </div>
-                </div>
+      <section className="offer-section">
+        <div className="container">
+          <div className="offer-wrapper reveal">
+            <div className="offer-card light-card">
+              <div className="offer-content"><h2>خالص شہد گفٹ باکس</h2><p>قدرتی شہد کے خصوصی تحائف</p><a href="#products" className="offer-btn" onClick={(e) => smoothScroll(e, '#products')}>ابھی خریدیں</a></div>
+              <div className="offer-image"><img src={giftBoxImg} alt="gift" /></div>
             </div>
-        </>
-    );
+            <div className="offer-card dark-card">
+              <div className="offer-content"><h2>زنبورا پریمیم شہد</h2><p>خالص اور قدرتی ذائقہ</p><a href="#products" className="offer-btn dark-btn" onClick={(e) => smoothScroll(e, '#products')}>مزید دیکھیں</a></div>
+              <div className="offer-image"><img src={honeyMainImg} alt="premium" /></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="modern-category">
+        <div className="container">
+          <div className="modern-category-box reveal">
+            <div className="modern-category-header"><h2>مصنوعات کی اقسام</h2><p>زنبورا کے خالص اور قدرتی شہد کی مختلف اقسام</p></div>
+            <div className="modern-slider-wrapper">
+              <button className="modern-arrow" onClick={() => document.querySelector('.modern-slider')?.scrollBy({ left: -170, behavior: 'smooth' })}><i className="fas fa-chevron-right"></i></button>
+              <div className="modern-slider">
+                {categories.map((cat, idx) => (
+                  <div className="modern-card" key={idx}>
+                    <div className="modern-circle"><img src={cat.img} alt={cat.name} /></div>
+                    <h4>{cat.name}</h4>
+                  </div>
+                ))}
+              </div>
+              <button className="modern-arrow" onClick={() => document.querySelector('.modern-slider')?.scrollBy({ left: 170, behavior: 'smooth' })}><i className="fas fa-chevron-left"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="why-section" id="contact">
+        <div className="container">
+          <div className="why-title reveal"><h2>کیوں <span>زنبورا</span> کو منتخب کریں؟</h2></div>
+          <div className="why-wrapper reveal">
+            <div className="why-features">
+              <div className="why-card"><div className="why-icon"><i className="fas fa-leaf"></i></div><h4>خالص اور قدرتی شہد</h4></div>
+              <div className="why-card"><div className="why-icon"><i className="fas fa-award"></i></div><h4>بہترین معیار کی ضمانت</h4></div>
+              <div className="why-card"><div className="why-icon"><i className="fas fa-truck"></i></div><h4>تیز اور محفوظ ڈیلیوری</h4></div>
+            </div>
+            <div className="why-center"><div className="why-machine"><img src={honeyMainImg} alt="honey" /></div></div>
+            <div className="why-features">
+              <div className="why-card"><div className="why-icon"><i className="fas fa-heart"></i></div><h4>صحت بخش اور غذائیت سے بھرپور</h4></div>
+              <div className="why-card"><div className="why-icon"><i className="fas fa-shield-alt"></i></div><h4>مکمل صفائی اور حفاظت</h4></div>
+              <div className="why-card"><div className="why-icon"><i className="fas fa-star"></i></div><h4>ہزاروں خوش صارفین کا اعتماد</h4></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="testimonials-section" id="testimonials">
+        <div className="container">
+          <div className="faq-title reveal"><h2>صارفین کے <span>تاثرات</span></h2></div>
+          <div className="testimonial-grid">
+            <div className="testi-card reveal"><div className="testi-stars">★★★★★</div><p className="testi-text">"زنبورا کا شہد حقیقت میں خالص اور لاجواب ہے۔ روزانہ استعمال سے مجھے توانائی محسوس ہوتی ہے۔"</p><h4 className="testi-name">- عائشہ خان</h4></div>
+            <div className="testi-card reveal"><div className="testi-stars">★★★★★</div><p className="testi-text">"بہترین پیکنگ اور ذائقہ۔ میں نے سدر شہد آزمایا، واقعی معیاری ہے۔ شکریہ زنبورا۔"</p><h4 className="testi-name">- احمد رضا</h4></div>
+            <div className="testi-card reveal"><div className="testi-stars">★★★★☆</div><p className="testi-text">"قدرتی مٹھاس اور خوشبو، گفٹ باکس بہت خوبصورت ہے۔ ضرور خریدیں گے۔"</p><h4 className="testi-name">- سعدیہ ملک</h4></div>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '40px' }}><a href="#products" className="btn" onClick={(e) => smoothScroll(e, '#products')}>مزید شہد خریدیں <i className="fas fa-arrow-left"></i></a></div>
+        </div>
+      </section>
+
+      <section className="faq-section" id="faq">
+        <div className="container">
+          <div className="faq-title reveal"><h2>اکثر <span>پوچھے گئے</span> سوالات</h2></div>
+          <div className="faq-container">
+            {[
+              { q: "کیا زنبورا شہد واقعی خالص ہے؟", a: "جی ہاں، زنبورا شہد 100% خالص اور قدرتی ہے، بغیر کسی ملاوٹ کے۔" },
+              { q: "شہد کی ڈیلیوری میں کتنا وقت لگتا ہے؟", a: "پورے پاکستان میں 2 سے 4 کاروباری دنوں میں آپ کا آرڈر پہنچ جاتا ہے۔" },
+              { q: "کون سی اقسام دستیاب ہیں؟", a: "سدر شہد، جنگلی پھول، آرگینک اور پریمیم گفٹ باکس موجود ہیں۔" },
+              { q: "کیا میں بڑی تعداد میں آرڈر کر سکتا ہوں؟", a: "ہول سیل آرڈرز کے لیے رابطہ کریں۔ ہم خصوصی تخفیف دیتے ہیں۔" }
+            ].map((faq, idx) => (
+              <div key={idx} className={`faq-item ${activeFaq === idx ? 'active' : ''}`}>
+                <div className="faq-question" onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}>
+                  <span>{faq.q}</span><i className="fas fa-chevron-down"></i>
+                </div>
+                <div className="faq-answer"><p>{faq.a}</p></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-col"><h4><i className="fas fa-droplet"></i> زنبورا</h4><p>قدرت کا سنہری تحفہ، خالص شہد۔ بہترین معیار اور قدرتی ذائقہ۔</p><div className="social-icons"><a href="#"><i className="fab fa-facebook-f"></i></a><a href="#"><i className="fab fa-instagram"></i></a><a href="#"><i className="fab fa-whatsapp"></i></a><a href="#"><i className="fab fa-twitter"></i></a></div></div>
+            <div className="footer-col"><h4>فوری لنکس</h4><ul><li><a href="#home" onClick={(e) => smoothScroll(e, '#home')}>صفحہ اول</a></li><li><a href="#products" onClick={(e) => smoothScroll(e, '#products')}>مصنوعات</a></li><li><a href="#about" onClick={(e) => smoothScroll(e, '#about')}>تعارف</a></li><li><a href="#testimonials" onClick={(e) => smoothScroll(e, '#testimonials')}>تبصرے</a></li><li><a href="#faq" onClick={(e) => smoothScroll(e, '#faq')}>سوالات</a></li></ul></div>
+            <div className="footer-col"><h4>رابطہ</h4><ul><li><i className="fas fa-map-marker-alt"></i> لاہور، پاکستان</li><li><i className="fas fa-phone"></i> +92 300 1234567</li><li><i className="fas fa-envelope"></i> info@zanbura.pk</li></ul></div>
+            <div className="footer-col"><h4>اوقات کار</h4><ul><li>پیر - جمعہ: 9:00 - 18:00</li><li>ہفتہ: 10:00 - 16:00</li><li>اتوار: بند</li></ul></div>
+          </div>
+          <div className="footer-bottom"><p><i className="far fa-copyright"></i> 2026 زنبورا | تمام حقوق محفوظ ہیں | قدرت کے ساتھ مٹھاس <i className="fas fa-heart" style={{ color: 'var(--primary)' }}></i></p></div>
+        </div>
+      </footer>
+
+      <a href="https://wa.me/923001234567?text=مجھے%20زنبورا%20شہد%20خریدنا%20ہے" className="whatsapp-float" target="_blank" rel="noopener noreferrer"><i className="fab fa-whatsapp"></i></a>
+
+      <div className={`modal-overlay ${isCartOpen ? 'active' : ''}`} onClick={() => setIsCartOpen(false)}>
+        <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close" onClick={() => setIsCartOpen(false)}><i className="fas fa-times"></i></button>
+          <h3>🛒 آپ کی کارٹ</h3>
+          {cart.length === 0 ? (
+            <div className="empty-cart-msg">کارٹ خالی ہے</div>
+          ) : (
+            <>
+              {cart.map(item => (
+                <div className="cart-item" key={item.id}>
+                  <div><div>{item.name}</div><div>Rs {item.price} x {item.quantity}</div></div>
+                  <div>
+                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={{ margin: '0 5px', padding: '5px 10px', cursor: 'pointer' }}>-</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={{ margin: '0 5px', padding: '5px 10px', cursor: 'pointer' }}>+</button>
+                    <button onClick={() => removeItem(item.id)} style={{ marginRight: '12px', background: 'none', border: 'none', color: '#c0392b', cursor: 'pointer' }}><i className="fas fa-trash"></i></button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+          <div className="cart-total">کل: Rs {cartTotal}</div>
+          <button className="clear-cart-btn" onClick={clearCart}>کارٹ خالی کریں</button>
+        </div>
+      </div>
+
+      <div className={`modal-overlay ${isAuthOpen ? 'active' : ''}`} onClick={() => setIsAuthOpen(false)}>
+        <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close" onClick={() => setIsAuthOpen(false)}><i className="fas fa-times"></i></button>
+          <div className="modal-tabs">
+            <button className={`tab-btn ${activeAuthTab === 'login' ? 'active' : ''}`} onClick={() => setActiveAuthTab('login')}>داخلہ</button>
+            <button className={`tab-btn ${activeAuthTab === 'register' ? 'active' : ''}`} onClick={() => setActiveAuthTab('register')}>اندراج</button>
+          </div>
+          {activeAuthTab === 'login' ? (
+            <div>
+              <div className="form-group"><label>ای میل یا موبائل نمبر</label><input type="text" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="example@email.com" /></div>
+              <div className="form-group"><label>پاس ورڈ</label><input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="••••••••" /></div>
+              <button className="modal-btn" onClick={handleLogin}>داخل ہوں</button>
+              <div className="form-switch">کیا آپ نیا ہیں؟ <span onClick={() => setActiveAuthTab('register')}>اندراج کریں</span></div>
+            </div>
+          ) : (
+            <div>
+              <div className="form-group"><label>مکمل نام</label><input type="text" value={regName} onChange={(e) => setRegName(e.target.value)} placeholder="علی احمد" /></div>
+              <div className="form-group"><label>ای میل</label><input type="email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} placeholder="example@email.com" /></div>
+              <div className="form-group"><label>پاس ورڈ</label><input type="password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} placeholder="کم از کم 6 حروف" /></div>
+              <button className="modal-btn" onClick={handleRegister}>اندراج کریں</button>
+              <div className="form-switch">پہلے سے رکن ہیں؟ <span onClick={() => setActiveAuthTab('login')}>داخلہ کریں</span></div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className={`modal-overlay ${isSearchOpen ? 'active' : ''}`} onClick={() => setIsSearchOpen(false)}>
+        <div className="modal-container search-container" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close" onClick={() => setIsSearchOpen(false)}><i className="fas fa-times"></i></button>
+          <h3>🔍 تلاش کریں</h3>
+          <div className="search-input-group">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="شہد، مصنوعات یا زمرہ..."
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              autoFocus
+            />
+            <button onClick={handleSearch}>
+              <i className="fas fa-search"></i>
+            </button>
+          </div>
+          <div style={{ fontSize: '0.75rem', marginTop: '18px', color: '#b9aa96' }}>
+            مثال: سدر شہد, آرگینک, پریمیم
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default App;
